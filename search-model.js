@@ -18,8 +18,8 @@ module.exports.processData = function(query,cb)
      response.on('end',function()
      {
        var parsed = JSON.parse(body);
-       parsed.link = "http://localhost:3500/artists/";
-       cb(null,parsed);
+       parsed.artists.link = "http://localhost:3500/artists/";
+       cb(null,parsed.artists);
      });
    });
    request.end();
