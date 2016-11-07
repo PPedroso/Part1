@@ -1,0 +1,25 @@
+<html>
+    <head>
+		<title>{{name}}</title>
+    </head>
+    <body>
+        <h4>{{type}}</h4>
+		<h1>{{name}}</h1>
+		<table>
+			<tr>
+				<td><img src="{{images[2].url}}"></td>
+			</tr>
+			<tr>
+				<td>Popularity:</td>
+				<td>{{popularity}}</td>
+				<td>&nbsp;</td>	
+				<td>Followers:</td>
+				<td>{{followers.total}}</td>
+			</tr>
+		</table>
+		<table>
+			<tr><td>Genres:</td></tr>
+			<tr><td>{{#each genres}}</td></tr>
+		</table>
+    </body>    
+</html>    
