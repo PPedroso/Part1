@@ -18,13 +18,22 @@ function view(viewName,result,cb)
     <table>
       {{#each items}}
         <tr>
-          <td><a href="http://localhost:3500/artists/{{id}}">{{name}}</a>({{id}})</td>
+          <td><a href="{{link}}{{id}}">{{name}}</a>({{id}})</td>
           <td><img src="{{images.1.url}}"></img></td>
         </tr>
       {{/each}}
     </table>
     </body>
   </html>    `
+
+    hb.registerHelper('link', function() {
+      var url = hb.escapeExpression("http://localhost:3500/artists/");
+      return new hb.SafeString(
+        url
+      );
+    });
+
+
     var template = hb.compile(source);
     var view = template(result.artists);
     console.log("template: " + view)
