@@ -12,30 +12,38 @@ var searchcontroller = require('./search-controller')(searchmodel);
 var artistsmodel = require('./artists-model');
 var artistscontroller = require('./artists-controller')(artistsmodel);
 
-var handlers = {
-    "search": searchcontroller.parse,
-    "artists": artistscontroller.parse
-};
+var connect = require('./custom-connect');
 
-//--------------------------Server Initialization----------------------//
+var app = connect();
 
-handlers.notFound = function(req,rsp)
+
+
+app.get("/search/",(req, res)=> {
+  extractQuerystring(req, res, searchcontroller.parse)
+
+});
+
+app.get("/artists/",(req, res)=> {
+  extractQuerystring(req, res, artistscontroller.parse)
+
+});
+
+app.use("*", (req, res) => notFound(req, res))
+
+function extractQuerystring(req, res, handler)
+{
+  let u = url.parse(req.url);
+  let pathname = u.pathname.substr(1, u.pathname.length);
+  let paths = pathname.split('/');
+   handler(req, res, paths[1]);
+}
+
+function notFound(req,rsp)
 {
     rsp.writeHead(404);
-    rsp.end();
+    rsp.end("Endpoint not found");
 }
 
-let server = http.createServer(processRequest);
+let server = http.createServer(app);
 
 server.listen(PORT, () => console.log("Listening on port " + PORT));
-
-function processRequest(req, rsp)
-{
-    let u = url.parse(req.url);
-    let pathname = u.pathname.substr(1, u.pathname.length);
-    let paths = pathname.split('/');
-    console.log(pathname);
-    let handler = handlers.hasOwnProperty(paths[0]) ? handlers[paths[0]] : handlers.notFound;
-    handler(req, rsp,paths[1]);
-    //rsp.setHeader("Content-Type", "text/html");
-}
